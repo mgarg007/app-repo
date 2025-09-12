@@ -19,7 +19,7 @@ build:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker build -t $IMAGE_REGISTRY:$IMAGE_TAG .
     - docker push $IMAGE_REGISTRY:$IMAGE_TAG
-    - docker run -d -p 8080:8080 --name app $IMAGE_REGISTRY:$IMAGE_TAG /bin/sh -c "curl -f http://localhost:8080/healthz"
+    - docker run -d -p 8083:8083 --name app $IMAGE_REGISTRY:$IMAGE_TAG /bin/sh -c "curl -f http://localhost:8083/healthz"
     #### Below CLIs used for verification ###
     # - docker run --privileged -d -p 8083:8083 --name app registry.rosetta.ericssondevops.com/sdu-automationsolution-center/5gc_paj/app-repo 
     # - docker ps
@@ -28,7 +28,7 @@ build:
     # - docker exec app curl -v http://localhost:8083/healthz
     # - curl -f http://localhost:8083/healthz
     #- sleep 15
-    #- curl -f http://localhost:8080/healthz
+    #- curl -f http://localhost:8083/healthz
     #- curl -Is http://localhost:8080/healthz | head -n 1
   after_script:
     - docker stop app || true
