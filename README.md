@@ -90,5 +90,10 @@ If you see a 'Ready and Reconciled' status, Flux is now watching the gitops-repo
 * Use Gitlab CI/CD variable or any other valut mechanism to restore your key information like USERNAME/PW/IP & other stuff.
 * This demonstrates on-a single control plane k8s created via kind & on top of that flux operator/controller has been installed and then repo reconcilltion starts via kustomizations.
 * Binaries dependencies should be taken care of.
-  
+
+# **How AI Assistance helped me in this project**
+Artificial Intelligence is no longer just a buzzword; it has become a true automation and efficiency lever across domains, enabling individuals and teams to achieve their milestones faster.
+In my case, AI has been instrumental in generating application code, even scaffolding CI pipeline definitions. While adjustments were required to make them production-ready, the overall process was significantly accelerated.
+In short, AI has increased operational efficiency, reduced lead time, and improved project delivery speed. that's my 2cents on this subject.
+
 Happy Learning!!!🚀
