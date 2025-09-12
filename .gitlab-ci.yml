@@ -1,0 +1,69 @@
+stages:
+  - build
+  - test
+  - gitops-deploy
+
+variables:
+  IMAGE_REGISTRY: registry.gitlab.com/<your-group>/<your-app>
+  IMAGE_TAG: $CI_COMMIT_SHORT_SHA
+
+before_script:
+  - echo "Running CI for commit $CI_COMMIT_SHA"
+
+build:
+  stage: build
+  image: docker:20.10.16
+  services:
+    - docker:20.10.16-dind
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker build -t $IMAGE_REGISTRY:$IMAGE_TAG .
+    - docker push $IMAGE_REGISTRY:$IMAGE_TAG
+    - docker run -d -p 8080:8080 --name app $IMAGE_REGISTRY:$IMAGE_TAG /bin/sh -c "curl -f http://localhost:8080/healthz"
+    #### Below CLIs used for verification ###
+    # - docker run --privileged -d -p 8083:8083 --name app registry.rosetta.ericssondevops.com/sdu-automationsolution-center/5gc_paj/app-repo 
+    # - docker ps
+    # - sleep 10
+    # - docker logs app 
+    # - docker exec app curl -v http://localhost:8083/healthz
+    # - curl -f http://localhost:8083/healthz
+    #- sleep 15
+    #- curl -f http://localhost:8080/healthz
+    #- curl -Is http://localhost:8080/healthz | head -n 1
+  after_script:
+    - docker stop app || true
+    - docker rm app || true   
+  tags:
+    - $RUNNER
+
+test:
+  stage: test
+  image: python:3.9-slim
+  before_script:
+    - pip install -r requirements.txt
+    - pip install pytest
+  script:
+    - export PYTHONPATH=. 
+    - pytest -v tests
+  tags:
+    - $Runner
+    
+gitops-deploy:
+  stage: gitops-deploy
+  image: alpine/git:latest
+  variables:
+    # The GitLab CI job token can be used for repo pushes if you enable
+    # “Allow CI job token to access the repository” in the project settings.
+    GIT_STRATEGY: none   # we will clone manually
+  before_script:
+    - git config --global user.email "ci-bot@example.com"
+    - git config --global user.name "gitlab-ci"  
+  script:
+    - git clone https://oauth2:$GITOPS_TOKEN@gitlab.com/<your-namespace>/gitops-repo.git
+    - cd gitops-repo
+    - sed -i "s#image: .*#image: $IMAGE_REGISTRY:$IMAGE_TAG#g" ./deployment.yaml
+    - git add .
+    - git commit -m "Update image to $IMAGE_REGISTRY:$IMAGE_TAG"
+    - git push origin main
+  tags:
+    - $Runner
