@@ -83,7 +83,7 @@ If you see a 'Ready and Reconciled' status, Flux is now watching the gitops-repo
    * **GitlabCI will trigger and does three things (Docker Image builder/Pushing Image to registry/Unit Test Execution & Update gitops-repo's deployment.yaml with the new tag and push it.**
    * **Flux detects the change verify by**: ```kubectl -n flux-system get kustomizations -w```
    * **Verify pods run with new image**: ```kubectl get po -n <<your namespace>>```
-   * **Test the Endpoints**: ```kubectl port-forward svc/myapp 8080:80 & curl http://localhost:8080/health```
+   * **Test the Endpoints**: ```kubectl port-forward svc/myapp 8083/8080:80 & curl http://localhost:8080/3/healthz```
 
 # **Few Points to Remember**
 * Slave Machine type or Gitlab Runner matters a lot if you choose Docker Type or K8S executor or shell based please consider this, have tried with Docker/Shell and this solution will work on both.
