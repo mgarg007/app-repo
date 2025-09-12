@@ -90,6 +90,7 @@ If you see a 'Ready and Reconciled' status, Flux is now watching the gitops-repo
 * Slave Machine type or Gitlab Runner matters a lot if you choose Docker Type or K8S executor or shell based please consider this, have tried with Docker/Shell and this solution will work on both.
 * Use Gitlab CI/CD variable or any other valut mechanism to restore your key information like USERNAME/PW/IP & other stuff.
 * This demonstrates on-a single control plane k8s created via kind & on top of that flux operator/controller has been installed and then repo reconcilltion starts via kustomizations.
+* I did with Port 8080 & 8083.
 * Binaries dependencies should be taken care of.
 
 # **How AI Assistance helped me in this project**
