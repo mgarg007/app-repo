@@ -6,6 +6,7 @@ This project demonstrates a GitOps-based CI/CD pipeline using two separate repos
    1. Contains application source code, Dockerfile, and GitLab CI pipeline.
    2. Builds and publishes container images to a registry.
    3. Basic Unit Test Execution.
+   4. Deploy (GitOps Trigger): Clones the gitops-repo. Updates the deployment.yaml manifest file with the new Docker image tag built in the build stage. Commits and pushes the change to the gitops-repo
 # **gitops-repo**
    1. Contains Kubernetes manifests file (or Helm charts).
    2. Defines how the application is deployed in the cluster.
